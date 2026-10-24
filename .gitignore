@@ -1,0 +1,20 @@
+# Compiled bytecode & python cache
+__pycache__/
+*.pyc
+
+# Heavy archives & zip bundles
+*.zip
+
+# Local scratch / test files
+audit_*.py
+test_*.py
+check_*.py
+inspect_*.py
+tune_*.py
+optimize_*.py
+rebuild_*.py
+generate_perfect_*.py
+
+# Operating system files
+.DS_Store
+Thumbs.db
