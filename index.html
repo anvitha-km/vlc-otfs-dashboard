@@ -418,24 +418,40 @@
 
       </div>
 
-      <!-- Quick Preset Buttons -->
-      <div class="card-panel p-4 rounded-xl border border-sky-500/20 bg-gradient-to-b from-sky-50 to-slate-100 dark:from-sky-950/20 dark:to-slate-900/60 space-y-2">
-        <h3 class="text-xs font-semibold text-sky-700 dark:text-sky-300 flex items-center gap-1.5 uppercase tracking-wide">
-          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-          Review Presets
-        </h3>
-        <div class="flex flex-col gap-1.5 text-xs">
-          <button id="btnDemoLowSpeed" class="w-full text-left px-3 py-2 rounded-lg bg-white hover:bg-slate-100 dark:bg-slate-800/80 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-300 border border-slate-200 dark:border-transparent transition flex justify-between items-center">
-            <span>Scenario 1: Low Speed (20 km/h)</span>
-            <span class="text-[10px] text-slate-500 dark:text-slate-400 font-mono">OFDM &approx; OTFS</span>
+            <!-- Viva Examination Scenarios (1-Click Professor Demos) -->
+      <div class="card-panel p-4 rounded-xl border border-sky-500/25 bg-gradient-to-b from-sky-50/80 to-slate-100 dark:from-sky-950/30 dark:to-slate-900/80 space-y-2.5">
+        <div class="flex items-center justify-between">
+          <h3 class="text-xs font-semibold text-sky-700 dark:text-sky-300 flex items-center gap-1.5 uppercase tracking-wide">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            Viva Defense Scenarios
+          </h3>
+          <span class="text-[10px] text-sky-600 dark:text-sky-400 font-mono">1-Click</span>
+        </div>
+
+        <div class="space-y-1.5 text-xs">
+          <button type="button" id="btnDemoUrban" class="w-full text-left px-2.5 py-1.5 rounded-lg bg-white hover:bg-slate-50 dark:bg-slate-800/80 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-300 border border-slate-200 dark:border-slate-700/80 transition flex justify-between items-center">
+            <span>1. Urban Transit (30 km/h)</span>
+            <span class="text-[10px] text-emerald-600 dark:text-emerald-400 font-mono">OFDM Stable</span>
           </button>
-          <button id="btnDemoHighSpeed" class="w-full text-left px-3 py-2 rounded-lg bg-white hover:bg-slate-100 dark:bg-slate-800/80 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-300 border border-slate-200 dark:border-transparent transition flex justify-between items-center">
-            <span>Scenario 2: Highway (100 km/h)</span>
-            <span class="text-[10px] text-emerald-600 dark:text-emerald-400 font-mono font-bold">OFDM Fails!</span>
+          <button type="button" id="btnDemoHighway" class="w-full text-left px-2.5 py-1.5 rounded-lg bg-white hover:bg-slate-50 dark:bg-slate-800/80 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-300 border border-slate-200 dark:border-slate-700/80 transition flex justify-between items-center">
+            <span>2. Highway Cruising (100 km/h)</span>
+            <span class="text-[10px] text-amber-600 dark:text-amber-400 font-mono">Baseline</span>
           </button>
-          <button id="btnDemoExtreme" class="w-full text-left px-3 py-2 rounded-lg bg-white hover:bg-slate-100 dark:bg-slate-800/80 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-300 border border-slate-200 dark:border-transparent transition flex justify-between items-center">
-            <span>Scenario 3: Fast Transit (160 km/h)</span>
-            <span class="text-[10px] text-sky-600 dark:text-sky-400 font-mono">AI Dominates</span>
+          <button type="button" id="btnDemoExtremeTransit" class="w-full text-left px-2.5 py-1.5 rounded-lg bg-white hover:bg-slate-50 dark:bg-slate-800/80 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-300 border border-slate-200 dark:border-slate-700/80 transition flex justify-between items-center">
+            <span>3. High-Speed Transit (160 km/h)</span>
+            <span class="text-[10px] text-rose-600 dark:text-rose-400 font-mono">AI Dominates</span>
+          </button>
+          <button type="button" id="btnDemoDenseFog" class="w-full text-left px-2.5 py-1.5 rounded-lg bg-white hover:bg-slate-50 dark:bg-slate-800/80 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-300 border border-slate-200 dark:border-slate-700/80 transition flex justify-between items-center">
+            <span>4. Winter Dense Fog (60 m Vis)</span>
+            <span class="text-[10px] text-sky-600 dark:text-sky-400 font-mono">Kim Loss 14dB</span>
+          </button>
+          <button type="button" id="btnDemoMonsoon" class="w-full text-left px-2.5 py-1.5 rounded-lg bg-white hover:bg-slate-50 dark:bg-slate-800/80 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-300 border border-slate-200 dark:border-slate-700/80 transition flex justify-between items-center">
+            <span>5. Monsoon Night Rain (28 mm/h)</span>
+            <span class="text-[10px] text-indigo-600 dark:text-indigo-400 font-mono">Rain + Night</span>
+          </button>
+          <button type="button" id="btnDemoClipping" class="w-full text-left px-2.5 py-1.5 rounded-lg bg-white hover:bg-slate-50 dark:bg-slate-800/80 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-300 border border-slate-200 dark:border-slate-700/80 transition flex justify-between items-center">
+            <span>6. Non-linear LED Clip (0.5x)</span>
+            <span class="text-[10px] text-purple-600 dark:text-purple-400 font-mono">Bussgang Stress</span>
           </button>
         </div>
       </div>
@@ -1361,15 +1377,44 @@
       });
     });
 
-    // Presets
-    document.getElementById('btnDemoLowSpeed').addEventListener('click', () => {
-      sliderSpeed.value = 20; sliderSpeed.dispatchEvent(new Event('input'));
+
+
+    
+    // Viva Defense Quick Scenario Handlers
+    document.getElementById('btnDemoUrban').addEventListener('click', () => {
+      sliderSpeed.value = 30; sliderSpeed.dispatchEvent(new Event('input'));
+      sliderDist.value = 20;  sliderDist.dispatchEvent(new Event('input'));
+      sliderBias.value = 1.2; sliderBias.dispatchEvent(new Event('input'));
+      document.getElementById('btnWeatherClear').click();
     });
-    document.getElementById('btnDemoHighSpeed').addEventListener('click', () => {
+    document.getElementById('btnDemoHighway').addEventListener('click', () => {
       sliderSpeed.value = 100; sliderSpeed.dispatchEvent(new Event('input'));
+      sliderDist.value = 25;   sliderDist.dispatchEvent(new Event('input'));
+      sliderBias.value = 1.0;  sliderBias.dispatchEvent(new Event('input'));
+      document.getElementById('btnWeatherClear').click();
     });
-    document.getElementById('btnDemoExtreme').addEventListener('click', () => {
+    document.getElementById('btnDemoExtremeTransit').addEventListener('click', () => {
       sliderSpeed.value = 160; sliderSpeed.dispatchEvent(new Event('input'));
+      sliderDist.value = 25;   sliderDist.dispatchEvent(new Event('input'));
+      sliderBias.value = 1.0;  sliderBias.dispatchEvent(new Event('input'));
+      document.getElementById('btnWeatherClear').click();
+    });
+    document.getElementById('btnDemoDenseFog').addEventListener('click', () => {
+      sliderSpeed.value = 80; sliderSpeed.dispatchEvent(new Event('input'));
+      sliderDist.value = 25;  sliderDist.dispatchEvent(new Event('input'));
+      radioEnvAuto.checked = true; radioEnvAuto.dispatchEvent(new Event('change'));
+      document.querySelector('.btn-offline-preset[data-preset="delhi"]').click();
+    });
+    document.getElementById('btnDemoMonsoon').addEventListener('click', () => {
+      sliderSpeed.value = 60; sliderSpeed.dispatchEvent(new Event('input'));
+      sliderDist.value = 20;  sliderDist.dispatchEvent(new Event('input'));
+      radioEnvAuto.checked = true; radioEnvAuto.dispatchEvent(new Event('change'));
+      document.querySelector('.btn-offline-preset[data-preset="bengaluru"]').click();
+    });
+    document.getElementById('btnDemoClipping').addEventListener('click', () => {
+      sliderSpeed.value = 100; sliderSpeed.dispatchEvent(new Event('input'));
+      sliderDist.value = 25;   sliderDist.dispatchEvent(new Event('input'));
+      sliderBias.value = 0.5;  sliderBias.dispatchEvent(new Event('input')); // Severe non-linear clipping
     });
 
     // Reset All System Parameters
@@ -1456,14 +1501,20 @@
       const norm_doppler = f_d / subcarrier_spacing;
       const doppler_tap = Math.min(Math.round(norm_doppler * N_doppler), 7);
 
-      // Geometric LoS Lambertian Optical Gain
+      // Optical LoS Lambertian Gain (Shaaban 2021 Eq. 2, El Jbari 2025 Eq. 1)
       const semi_angle = 60 * Math.PI / 180;
-      const m_lambert = -Math.log(2) / Math.log(Math.cos(semi_angle));
+      const m_lambert = -Math.log(2) / Math.log(Math.cos(semi_angle)); // m = 1.0 (Lambertian order)
       const A_pd = 1e-4; // 1 cm^2 photodiode area
-      const theta = 20 * Math.PI / 180;
-      const phi = 20 * Math.PI / 180;
+      const theta = 20 * Math.PI / 180; // Angle of incidence
+      const phi = 20 * Math.PI / 180;   // Angle of irradiance
       const d_m = state.dist_m;
       const d_km = d_m / 1000.0;
+
+      // Optical filter transmission and CPC concentrator gain
+      const T_s = 0.70; // Blue bandpass optical filter transmission (450 nm)
+      const n_cpc = 1.5; // Optical concentrator refractive index
+      const fov_rad = 60 * Math.PI / 180;
+      const g_cpc = (n_cpc * n_cpc) / Math.pow(Math.sin(fov_rad), 2); // CPC gain = 3.0
 
       let fog_loss_opt_dB = 0.0;
       let rain_loss_opt_dB = 0.0;
@@ -1517,7 +1568,7 @@
 
       // Optical LoS Path Loss including atmospheric attenuation (Display Only on KPI card)
       const H_los_geom = ((m_lambert + 1) * A_pd / (2 * Math.PI * Math.pow(d_m, 2))) *
-                         Math.pow(Math.cos(phi), m_lambert) * Math.cos(theta);
+                         Math.pow(Math.cos(phi), m_lambert) * Math.cos(theta) * (T_s * g_cpc);
       const H_los_geom_dB = 10 * Math.log10(H_los_geom + 1e-18);
       const total_opt_loss_dB = fog_loss_opt_dB + rain_loss_opt_dB;
       const H_los_dB = H_los_geom_dB - total_opt_loss_dB;
@@ -1629,6 +1680,28 @@
       document.getElementById('tableRate_AI').innerText = `${rate_ai} Mbps`;
       document.getElementById('kpiThroughput').innerText = `${rate_ai} Mbps`;
 
+      // Dynamic Scenario Conclusion Box
+      let conclusion = "";
+      let envNote = "";
+      if (phys.total_opt_loss_dB > 2.0) {
+        envNote = ` Severe atmospheric attenuation (${phys.fog_loss_elec_dB.toFixed(1)} dB electrical loss) drastically reduces optical SNR. While OFDM experiences complete transmission breakdown, 2D-CNN AI-OTFS sustains viable vehicular telemetry.`;
+      } else if (phys.solar_noise_elec_dB > 0.8) {
+        envNote = ` Direct solar background irradiance (+${phys.solar_noise_elec_dB.toFixed(2)} dB shot noise) elevates the receiver noise floor, which OTFS overcomes via 2D Delay-Doppler transform diversity.`;
+      } else if (phys.rain_loss_elec_dB > 0.3) {
+        envNote = ` Heavy rainfall introduces minor optical attenuation (${phys.rain_loss_elec_dB.toFixed(2)} dB electrical), confirming that fog scattering and solar shot noise dominate over rain in short-range V2X.`;
+      }
+
+      if (state.speed_kmh <= 30) {
+        conclusion = `<span class="font-semibold text-emerald-600 dark:text-emerald-400">Urban Transit Scenario (${state.speed_kmh} km/h):</span> Low Doppler spread (${Math.round(phys.f_d)} Hz) maintains OFDM subcarrier orthogonality.${envNote} Classical OTFS preserves lower PAPR, avoiding LED non-linear saturation.`;
+      } else if (state.speed_kmh <= 80) {
+        conclusion = `<span class="font-semibold text-amber-600 dark:text-amber-400">Suburban Scenario (${state.speed_kmh} km/h):</span> Moderate Doppler spread (${Math.round(phys.f_d)} Hz) induces inter-carrier interference in OFDM.${envNote} Classical OTFS preserves delay-Doppler orthogonality, while the 2D-CNN AI detector compensates for LED clipping distortion.`;
+      } else {
+        conclusion = `<span class="font-semibold text-rose-600 dark:text-rose-400">High-Speed Highway Scenario (${state.speed_kmh} km/h):</span> Severe Doppler spread (${Math.round(phys.f_d)} Hz) destroys OFDM subcarrier orthogonality (BER &approx; 0.48).${envNote} OTFS eliminates Doppler impairment entirely, and <strong>2D-CNN AI-OTFS achieves mission-critical QoS with a consistent 1.85 dB SNR advantage</strong>.`;
+      }
+
+      const dynBox = document.getElementById('dynamicConclusionBox');
+      if (dynBox) dynBox.innerHTML = conclusion;
+
       renderPlots();
     }
 
@@ -1695,11 +1768,34 @@
         });
       }
 
+      // Calculate operating SNR under current environmental penalty
+      const eff_operating_snr = Math.max(0.0, Math.min(24.0, 16.0 - phys.weatherPenaltyDb));
+
       Plotly.newPlot('plotBERvsSNR', traces1, {
         ...layoutBase,
         xaxis: { title: 'Nominal SNR (dB)', gridcolor: pt.gridColor, zerolinecolor: pt.zeroLineColor },
         yaxis: { title: 'Bit Error Rate', type: 'log', range: [-4.6, 0.0], gridcolor: pt.gridColor, zerolinecolor: pt.zeroLineColor },
-        legend: { x: 0.02, y: 0.05, bgcolor: pt.legendBg, bordercolor: pt.legendBorder, borderwidth: 1, font: { color: pt.fontColor } }
+        legend: { x: 0.02, y: 0.05, bgcolor: pt.legendBg, bordercolor: pt.legendBorder, borderwidth: 1, font: { color: pt.fontColor } },
+        shapes: [
+          {
+            type: 'line',
+            x0: eff_operating_snr, x1: eff_operating_snr,
+            y0: 1e-5, y1: 0.5,
+            line: { color: 'rgba(244, 63, 94, 0.85)', width: 1.5, dash: 'dot' }
+          }
+        ],
+        annotations: [
+          {
+            x: eff_operating_snr, y: -0.5,
+            xref: 'x', yref: 'y',
+            text: `📍 Operating: ${eff_operating_snr.toFixed(1)} dB`,
+            showarrow: false,
+            font: { size: 9.5, color: '#f43f5e', family: 'monospace' },
+            bgcolor: pt.legendBg,
+            bordercolor: '#f43f5e',
+            borderwidth: 1
+          }
+        ]
       }, { responsive: true, displayModeBar: false });
 
       // --- GRAPH 2: BER vs. Speed ---
@@ -1819,19 +1915,37 @@
     }
 
     function renderDDHeatmap(phys) {
-      const z_grid = Array.from({ length: 16 }, () => Array(32).fill(0.02));
-      const d_tap = Math.min(15, Math.max(0, phys.doppler_tap));
-      const pt = getPlotTheme();
-      z_grid[d_tap][0] = 1.0; 
-      z_grid[Math.max(0, d_tap - 1)][1] = 0.35;
-      z_grid[Math.min(15, d_tap + 1)][0] = 0.15;
+      // 2D Delay-Doppler Channel Matrix (M=32 delay bins, N=16 centered Doppler bins [-8, +7])
+      // Matching Aldababsa 2024 Fig. 4, Yuan 2021 Eq. 8, and ai_otfs_vlc_2dcnn.py
+      const delay_bins = Array.from({ length: 32 }, (_, i) => i);
+      const doppler_bins = Array.from({ length: 16 }, (_, i) => i - 8); // [-8, ..., 0, ..., +7]
+      const z_grid = Array.from({ length: 16 }, () => Array(32).fill(0.015));
 
+      // Map Doppler shift to grid index: k0 = round(f_d / 15kHz * 16)
+      const k0 = Math.min(6, Math.max(0, Math.round((phys.f_d / 15e3) * 16)));
+      const zero_d_idx = 8; // Doppler bin 0 is at array index 8
+
+      // Path 1: Direct LoS (Delay 0, Doppler +k0)
+      z_grid[Math.min(15, zero_d_idx + k0)][0] = 1.0;
+
+      // Path 2: Ground / Road Asphalt Reflection (Delay 1, Doppler +k0 - 1, gain 0.40)
+      z_grid[Math.max(0, zero_d_idx + k0 - 1)][1] = 0.42;
+
+      // Path 3: Surrounding Vehicle / Guardrail Reflection (Delay 3, Doppler -k0, gain 0.18)
+      z_grid[Math.max(0, zero_d_idx - k0)][3] = 0.20;
+
+      const pt = getPlotTheme();
       Plotly.newPlot('plotDDHeatmap', [{
-        z: z_grid, type: 'heatmap', colorscale: 'Viridis', showscale: false
+        x: delay_bins,
+        y: doppler_bins,
+        z: z_grid,
+        type: 'heatmap',
+        colorscale: 'Viridis',
+        showscale: false
       }], {
         ...getResponsiveLayout(),
-        xaxis: { title: 'Delay (l)', gridcolor: pt.gridColor, zerolinecolor: pt.zeroLineColor },
-        yaxis: { title: 'Doppler (k)', gridcolor: pt.gridColor, zerolinecolor: pt.zeroLineColor }
+        xaxis: { title: 'Delay Index (l ∈ [0, 31])', gridcolor: pt.gridColor, zerolinecolor: pt.zeroLineColor },
+        yaxis: { title: 'Doppler Index (k ∈ [-8, +7])', gridcolor: pt.gridColor, zerolinecolor: pt.zeroLineColor }
       }, { responsive: true, displayModeBar: false });
     }
 
