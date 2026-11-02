@@ -257,23 +257,23 @@
         <div class="space-y-3 pt-2 border-t border-slate-200 dark:border-slate-800/80">
           <div class="flex items-center justify-between">
             <label class="font-medium text-xs text-slate-700 dark:text-slate-200 block">Environmental Input</label>
-            <span id="envActiveBadge" class="text-[10px] px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-medium border border-slate-300 dark:border-slate-700">Manual Mode</span>
+            <span id="envActiveBadge" class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 font-medium border border-emerald-500/30">Auto Real-World</span>
           </div>
 
-          <!-- Radio Selector (Picture 2 Option) -->
-          <div class="space-y-1.5 text-xs bg-slate-50 dark:bg-slate-900/60 p-2 rounded-lg border border-slate-200 dark:border-slate-800">
-            <label class="flex items-center space-x-2.5 cursor-pointer">
-              <input type="radio" name="envInputMode" id="radioEnvAuto" value="auto" class="text-sky-500 focus:ring-0">
-              <span class="text-slate-700 dark:text-slate-300 font-medium">Automatically fetch real-world conditions</span>
+          <!-- Radio Selector (Environmental Input Mode) -->
+          <div class="space-y-2 text-xs bg-slate-50 dark:bg-slate-900/60 p-2.5 rounded-lg border border-slate-200 dark:border-slate-800">
+            <label class="flex items-center space-x-2.5 cursor-pointer select-none">
+              <input type="radio" name="envInputMode" id="radioEnvAuto" value="auto" checked class="w-4 h-4 text-sky-600 focus:ring-sky-500 cursor-pointer">
+              <span class="text-slate-800 dark:text-slate-200 font-medium">Automatically fetch real-world conditions</span>
             </label>
-            <label class="flex items-center space-x-2.5 cursor-pointer">
-              <input type="radio" name="envInputMode" id="radioEnvManual" value="manual" checked class="text-sky-500 focus:ring-0">
-              <span class="text-slate-700 dark:text-slate-300 font-medium">Manually select conditions for testing</span>
+            <label class="flex items-center space-x-2.5 cursor-pointer select-none">
+              <input type="radio" name="envInputMode" id="radioEnvManual" value="manual" class="w-4 h-4 text-sky-600 focus:ring-sky-500 cursor-pointer">
+              <span class="text-slate-800 dark:text-slate-200 font-medium">Manually select conditions for testing</span>
             </label>
           </div>
 
           <!-- A. MANUAL MODE PRESETS -->
-          <div id="panelEnvManual" class="space-y-2">
+          <div id="panelEnvManual" class="space-y-2 hidden">
             <div class="grid grid-cols-3 gap-2 text-xs">
               <button type="button" id="btnWeatherClear" class="weather-btn active px-2 py-2 rounded-lg border border-sky-500 bg-sky-500/15 dark:bg-sky-500/20 text-sky-700 dark:text-sky-300 font-semibold text-center transition" data-weather="clear">
                 Clear Day
@@ -289,7 +289,7 @@
           </div>
 
           <!-- B. AUTO REAL-WORLD PANEL (Hidden when manual) -->
-          <div id="panelEnvAuto" class="space-y-2.5 hidden">
+          <div id="panelEnvAuto" class="space-y-2.5">
             <!-- Search place or Campus -->
             <div class="relative">
               <div class="flex justify-between items-center mb-1">
@@ -769,8 +769,13 @@
         </div>
 
         <!-- Dynamic Scenario Conclusion Text -->
-        <div id="dynamicConclusionBox" class="p-3 rounded-lg bg-slate-100 dark:bg-[#070b14] border border-slate-200 dark:border-slate-800 text-[11px] sm:text-xs text-slate-700 dark:text-slate-300 leading-relaxed transition-colors duration-200">
-          <!-- Populated by JavaScript -->
+        <div id="dynamicConclusionBox" class="p-3.5 rounded-lg bg-slate-100 dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 text-[11px] sm:text-xs text-slate-700 dark:text-slate-300 leading-relaxed transition-colors duration-200 shadow-xs">
+          <div class="flex items-start gap-2.5">
+            <span class="text-base shrink-0 select-none">📊</span>
+            <div id="dynamicConclusionContent">
+              <span class="font-semibold text-rose-600 dark:text-rose-400">High-Speed Highway Scenario (100 km/h):</span> Severe Doppler spread destroys standard OFDM subcarrier orthogonality (<span class="font-mono text-amber-600 dark:text-amber-400 font-semibold">BER &approx; 0.48</span>). 2D Delay-Doppler OTFS eliminates Doppler impairment entirely, and <strong class="text-rose-600 dark:text-rose-400">2D-CNN AI-OTFS achieves mission-critical QoS with a consistent 1.85 dB SNR advantage</strong> under non-linear optical clipping.
+            </div>
+          </div>
         </div>
       </div>
 
@@ -900,45 +905,511 @@
 
     // Built-in High-Accuracy Campus & Institution Knowledge Map (Instant 0ms lookup)
     const CAMPUS_ALIASES = {
-      'nitk': { name: 'NITK Surathkal, Karnataka, India', lat: 13.0108, lon: 74.7943, tz: 'Asia/Kolkata' },
-      'nitk surathkal': { name: 'NITK Surathkal, Karnataka, India', lat: 13.0108, lon: 74.7943, tz: 'Asia/Kolkata' },
-      'surathkal': { name: 'Surathkal, Mangalore, Karnataka, India', lat: 13.0108, lon: 74.7943, tz: 'Asia/Kolkata' },
-      'krec': { name: 'KREC / NITK Surathkal, Karnataka, India', lat: 13.0108, lon: 74.7943, tz: 'Asia/Kolkata' },
-      'national institute of technology karnataka': { name: 'NITK Surathkal, Karnataka, India', lat: 13.0108, lon: 74.7943, tz: 'Asia/Kolkata' },
-      'mangalore': { name: 'Mangaluru, Karnataka, India', lat: 12.9141, lon: 74.8560, tz: 'Asia/Kolkata' },
-      'mangaluru': { name: 'Mangaluru, Karnataka, India', lat: 12.9141, lon: 74.8560, tz: 'Asia/Kolkata' },
-      'bengaluru': { name: 'Bengaluru, Karnataka, India', lat: 12.9716, lon: 77.5946, tz: 'Asia/Kolkata' },
-      'bangalore': { name: 'Bengaluru, Karnataka, India', lat: 12.9716, lon: 77.5946, tz: 'Asia/Kolkata' },
-      'iisc': { name: 'Indian Institute of Science (IISc), Bengaluru, India', lat: 13.0219, lon: 77.5671, tz: 'Asia/Kolkata' },
-      'iit bombay': { name: 'IIT Bombay, Powai, Mumbai, India', lat: 19.1334, lon: 72.9133, tz: 'Asia/Kolkata' },
-      'iitb': { name: 'IIT Bombay, Powai, Mumbai, India', lat: 19.1334, lon: 72.9133, tz: 'Asia/Kolkata' },
-      'mumbai': { name: 'Mumbai, Maharashtra, India', lat: 19.0760, lon: 72.8777, tz: 'Asia/Kolkata' },
-      'iit delhi': { name: 'IIT Delhi, Hauz Khas, New Delhi, India', lat: 28.5450, lon: 77.1926, tz: 'Asia/Kolkata' },
-      'iitd': { name: 'IIT Delhi, Hauz Khas, New Delhi, India', lat: 28.5450, lon: 77.1926, tz: 'Asia/Kolkata' },
-      'delhi': { name: 'New Delhi, India', lat: 28.6139, lon: 77.2090, tz: 'Asia/Kolkata' },
-      'new delhi': { name: 'New Delhi, India', lat: 28.6139, lon: 77.2090, tz: 'Asia/Kolkata' },
-      'iit madras': { name: 'IIT Madras, Chennai, Tamil Nadu, India', lat: 12.9915, lon: 80.2337, tz: 'Asia/Kolkata' },
-      'iitm': { name: 'IIT Madras, Chennai, Tamil Nadu, India', lat: 12.9915, lon: 80.2337, tz: 'Asia/Kolkata' },
-      'chennai': { name: 'Chennai, Tamil Nadu, India', lat: 13.0827, lon: 80.2707, tz: 'Asia/Kolkata' },
-      'iit kharagpur': { name: 'IIT Kharagpur, West Bengal, India', lat: 22.3149, lon: 87.3105, tz: 'Asia/Kolkata' },
-      'iitkgp': { name: 'IIT Kharagpur, West Bengal, India', lat: 22.3149, lon: 87.3105, tz: 'Asia/Kolkata' },
-      'kolkata': { name: 'Kolkata, West Bengal, India', lat: 22.5726, lon: 88.3639, tz: 'Asia/Kolkata' },
-      'iit kanpur': { name: 'IIT Kanpur, Uttar Pradesh, India', lat: 26.5123, lon: 80.2329, tz: 'Asia/Kolkata' },
-      'iitk': { name: 'IIT Kanpur, Uttar Pradesh, India', lat: 26.5123, lon: 80.2329, tz: 'Asia/Kolkata' },
-      'iit roorkee': { name: 'IIT Roorkee, Uttarakhand, India', lat: 29.8649, lon: 77.8966, tz: 'Asia/Kolkata' },
-      'iit guwahati': { name: 'IIT Guwahati, Assam, India', lat: 26.1878, lon: 91.6916, tz: 'Asia/Kolkata' },
-      'nit trichy': { name: 'NIT Trichy, Tamil Nadu, India', lat: 10.7610, lon: 78.8139, tz: 'Asia/Kolkata' },
-      'nit warangal': { name: 'NIT Warangal, Telangana, India', lat: 17.9836, lon: 79.5308, tz: 'Asia/Kolkata' },
-      'hyderabad': { name: 'Hyderabad, Telangana, India', lat: 17.3850, lon: 78.4867, tz: 'Asia/Kolkata' },
-      'nit calicut': { name: 'NIT Calicut, Kerala, India', lat: 11.3216, lon: 75.9336, tz: 'Asia/Kolkata' },
-      'bits pilani': { name: 'BITS Pilani, Rajasthan, India', lat: 28.3639, lon: 75.5873, tz: 'Asia/Kolkata' },
-      'mit manipal': { name: 'Manipal Institute of Technology, Manipal, India', lat: 13.3525, lon: 74.7928, tz: 'Asia/Kolkata' },
-      'manipal': { name: 'Manipal, Karnataka, India', lat: 13.3525, lon: 74.7928, tz: 'Asia/Kolkata' },
-      'munich': { name: 'Munich, Bavaria, Germany', lat: 48.1351, lon: 11.5820, tz: 'Europe/Berlin' },
-      'london': { name: 'London, Greater London, United Kingdom', lat: 51.5074, lon: -0.1278, tz: 'Europe/London' },
-      'new york': { name: 'New York, United States', lat: 40.7128, lon: -74.0060, tz: 'America/New_York' },
-      'tokyo': { name: 'Tokyo, Japan', lat: 35.6762, lon: 139.6503, tz: 'Asia/Tokyo' }
-    };
+    "nitk": {
+        "name": "NITK Surathkal, Karnataka, India",
+        "lat": 13.0108,
+        "lon": 74.7943,
+        "tz": "Asia/Kolkata"
+    },
+    "nitk surathkal": {
+        "name": "NITK Surathkal, Karnataka, India",
+        "lat": 13.0108,
+        "lon": 74.7943,
+        "tz": "Asia/Kolkata"
+    },
+    "surathkal": {
+        "name": "Surathkal, Mangaluru, Karnataka, India",
+        "lat": 13.0108,
+        "lon": 74.7943,
+        "tz": "Asia/Kolkata"
+    },
+    "krec": {
+        "name": "KREC / NITK Surathkal, Karnataka, India",
+        "lat": 13.0108,
+        "lon": 74.7943,
+        "tz": "Asia/Kolkata"
+    },
+    "national institute of technology karnataka": {
+        "name": "NITK Surathkal, Karnataka, India",
+        "lat": 13.0108,
+        "lon": 74.7943,
+        "tz": "Asia/Kolkata"
+    },
+    "mangalore": {
+        "name": "Mangaluru, Karnataka, India",
+        "lat": 12.9141,
+        "lon": 74.856,
+        "tz": "Asia/Kolkata"
+    },
+    "mangaluru": {
+        "name": "Mangaluru, Karnataka, India",
+        "lat": 12.9141,
+        "lon": 74.856,
+        "tz": "Asia/Kolkata"
+    },
+    "manipal": {
+        "name": "Manipal Institute of Technology, Manipal, Karnataka, India",
+        "lat": 13.3525,
+        "lon": 74.7928,
+        "tz": "Asia/Kolkata"
+    },
+    "mit manipal": {
+        "name": "Manipal Institute of Technology, Manipal, Karnataka, India",
+        "lat": 13.3525,
+        "lon": 74.7928,
+        "tz": "Asia/Kolkata"
+    },
+    "mahe": {
+        "name": "Manipal Academy of Higher Education, Manipal, India",
+        "lat": 13.3525,
+        "lon": 74.7928,
+        "tz": "Asia/Kolkata"
+    },
+    "iisc": {
+        "name": "Indian Institute of Science (IISc), Bengaluru, Karnataka, India",
+        "lat": 13.0219,
+        "lon": 77.5671,
+        "tz": "Asia/Kolkata"
+    },
+    "iisc bangalore": {
+        "name": "Indian Institute of Science (IISc), Bengaluru, India",
+        "lat": 13.0219,
+        "lon": 77.5671,
+        "tz": "Asia/Kolkata"
+    },
+    "bengaluru": {
+        "name": "Bengaluru, Karnataka, India",
+        "lat": 12.9716,
+        "lon": 77.5946,
+        "tz": "Asia/Kolkata"
+    },
+    "bangalore": {
+        "name": "Bengaluru, Karnataka, India",
+        "lat": 12.9716,
+        "lon": 77.5946,
+        "tz": "Asia/Kolkata"
+    },
+    "rvce": {
+        "name": "RV College of Engineering, Bengaluru, Karnataka, India",
+        "lat": 12.9237,
+        "lon": 77.4987,
+        "tz": "Asia/Kolkata"
+    },
+    "rv college": {
+        "name": "RV College of Engineering, Bengaluru, Karnataka, India",
+        "lat": 12.9237,
+        "lon": 77.4987,
+        "tz": "Asia/Kolkata"
+    },
+    "bmsce": {
+        "name": "BMS College of Engineering, Basavanagudi, Bengaluru, India",
+        "lat": 12.9416,
+        "lon": 77.5658,
+        "tz": "Asia/Kolkata"
+    },
+    "pes university": {
+        "name": "PES University, Bengaluru, Karnataka, India",
+        "lat": 12.9344,
+        "lon": 77.5345,
+        "tz": "Asia/Kolkata"
+    },
+    "pesit": {
+        "name": "PES University, Bengaluru, Karnataka, India",
+        "lat": 12.9344,
+        "lon": 77.5345,
+        "tz": "Asia/Kolkata"
+    },
+    "msrit": {
+        "name": "Ramaiah Institute of Technology, Bengaluru, India",
+        "lat": 13.0305,
+        "lon": 77.5649,
+        "tz": "Asia/Kolkata"
+    },
+    "ramaiah": {
+        "name": "Ramaiah Institute of Technology, Bengaluru, India",
+        "lat": 13.0305,
+        "lon": 77.5649,
+        "tz": "Asia/Kolkata"
+    },
+    "iiit bangalore": {
+        "name": "IIIT Bangalore, Electronic City, Bengaluru, India",
+        "lat": 12.844,
+        "lon": 77.6633,
+        "tz": "Asia/Kolkata"
+    },
+    "iiitb": {
+        "name": "IIIT Bangalore, Electronic City, Bengaluru, India",
+        "lat": 12.844,
+        "lon": 77.6633,
+        "tz": "Asia/Kolkata"
+    },
+    "siddaganga": {
+        "name": "Siddaganga Institute of Technology, Tumakuru, Karnataka, India",
+        "lat": 13.3275,
+        "lon": 77.1261,
+        "tz": "Asia/Kolkata"
+    },
+    "sit tumkur": {
+        "name": "Siddaganga Institute of Technology, Tumakuru, Karnataka, India",
+        "lat": 13.3275,
+        "lon": 77.1261,
+        "tz": "Asia/Kolkata"
+    },
+    "nie mysore": {
+        "name": "National Institute of Engineering (NIE), Mysuru, India",
+        "lat": 12.2837,
+        "lon": 76.6416,
+        "tz": "Asia/Kolkata"
+    },
+    "mysuru": {
+        "name": "Mysuru, Karnataka, India",
+        "lat": 12.2958,
+        "lon": 76.6394,
+        "tz": "Asia/Kolkata"
+    },
+    "mysore": {
+        "name": "Mysuru, Karnataka, India",
+        "lat": 12.2958,
+        "lon": 76.6394,
+        "tz": "Asia/Kolkata"
+    },
+    "iit bombay": {
+        "name": "IIT Bombay, Powai, Mumbai, Maharashtra, India",
+        "lat": 19.1334,
+        "lon": 72.9133,
+        "tz": "Asia/Kolkata"
+    },
+    "iitb": {
+        "name": "IIT Bombay, Powai, Mumbai, Maharashtra, India",
+        "lat": 19.1334,
+        "lon": 72.9133,
+        "tz": "Asia/Kolkata"
+    },
+    "mumbai": {
+        "name": "Mumbai, Maharashtra, India",
+        "lat": 19.076,
+        "lon": 72.8777,
+        "tz": "Asia/Kolkata"
+    },
+    "iit delhi": {
+        "name": "IIT Delhi, Hauz Khas, New Delhi, India",
+        "lat": 28.545,
+        "lon": 77.1926,
+        "tz": "Asia/Kolkata"
+    },
+    "iitd": {
+        "name": "IIT Delhi, Hauz Khas, New Delhi, India",
+        "lat": 28.545,
+        "lon": 77.1926,
+        "tz": "Asia/Kolkata"
+    },
+    "delhi": {
+        "name": "New Delhi, Delhi, India",
+        "lat": 28.6139,
+        "lon": 77.209,
+        "tz": "Asia/Kolkata"
+    },
+    "new delhi": {
+        "name": "New Delhi, Delhi, India",
+        "lat": 28.6139,
+        "lon": 77.209,
+        "tz": "Asia/Kolkata"
+    },
+    "iit madras": {
+        "name": "IIT Madras, Adyar, Chennai, Tamil Nadu, India",
+        "lat": 12.9915,
+        "lon": 80.2337,
+        "tz": "Asia/Kolkata"
+    },
+    "iitm": {
+        "name": "IIT Madras, Adyar, Chennai, Tamil Nadu, India",
+        "lat": 12.9915,
+        "lon": 80.2337,
+        "tz": "Asia/Kolkata"
+    },
+    "chennai": {
+        "name": "Chennai, Tamil Nadu, India",
+        "lat": 13.0827,
+        "lon": 80.2707,
+        "tz": "Asia/Kolkata"
+    },
+    "iit kharagpur": {
+        "name": "IIT Kharagpur, West Bengal, India",
+        "lat": 22.3149,
+        "lon": 87.3105,
+        "tz": "Asia/Kolkata"
+    },
+    "iitkgp": {
+        "name": "IIT Kharagpur, West Bengal, India",
+        "lat": 22.3149,
+        "lon": 87.3105,
+        "tz": "Asia/Kolkata"
+    },
+    "kolkata": {
+        "name": "Kolkata, West Bengal, India",
+        "lat": 22.5726,
+        "lon": 88.3639,
+        "tz": "Asia/Kolkata"
+    },
+    "iit kanpur": {
+        "name": "IIT Kanpur, Kalyanpur, Kanpur, Uttar Pradesh, India",
+        "lat": 26.5123,
+        "lon": 80.2329,
+        "tz": "Asia/Kolkata"
+    },
+    "iitk": {
+        "name": "IIT Kanpur, Kalyanpur, Kanpur, Uttar Pradesh, India",
+        "lat": 26.5123,
+        "lon": 80.2329,
+        "tz": "Asia/Kolkata"
+    },
+    "iit roorkee": {
+        "name": "IIT Roorkee, Roorkee, Uttarakhand, India",
+        "lat": 29.8649,
+        "lon": 77.8966,
+        "tz": "Asia/Kolkata"
+    },
+    "iitr": {
+        "name": "IIT Roorkee, Roorkee, Uttarakhand, India",
+        "lat": 29.8649,
+        "lon": 77.8966,
+        "tz": "Asia/Kolkata"
+    },
+    "iit guwahati": {
+        "name": "IIT Guwahati, North Guwahati, Assam, India",
+        "lat": 26.1878,
+        "lon": 91.6916,
+        "tz": "Asia/Kolkata"
+    },
+    "iitg": {
+        "name": "IIT Guwahati, North Guwahati, Assam, India",
+        "lat": 26.1878,
+        "lon": 91.6916,
+        "tz": "Asia/Kolkata"
+    },
+    "iit hyderabad": {
+        "name": "IIT Hyderabad, Kandi, Sangareddy, Telangana, India",
+        "lat": 17.5947,
+        "lon": 78.123,
+        "tz": "Asia/Kolkata"
+    },
+    "iith": {
+        "name": "IIT Hyderabad, Kandi, Sangareddy, Telangana, India",
+        "lat": 17.5947,
+        "lon": 78.123,
+        "tz": "Asia/Kolkata"
+    },
+    "iit bhu": {
+        "name": "IIT (BHU) Varanasi, Uttar Pradesh, India",
+        "lat": 25.2677,
+        "lon": 82.9913,
+        "tz": "Asia/Kolkata"
+    },
+    "iit indore": {
+        "name": "IIT Indore, Simrol, Madhya Pradesh, India",
+        "lat": 22.5204,
+        "lon": 75.9207,
+        "tz": "Asia/Kolkata"
+    },
+    "nit trichy": {
+        "name": "NIT Trichy, Tiruchirappalli, Tamil Nadu, India",
+        "lat": 10.761,
+        "lon": 78.8139,
+        "tz": "Asia/Kolkata"
+    },
+    "nitt": {
+        "name": "NIT Trichy, Tiruchirappalli, Tamil Nadu, India",
+        "lat": 10.761,
+        "lon": 78.8139,
+        "tz": "Asia/Kolkata"
+    },
+    "nit warangal": {
+        "name": "NIT Warangal, Kazipet, Telangana, India",
+        "lat": 17.9836,
+        "lon": 79.5308,
+        "tz": "Asia/Kolkata"
+    },
+    "nitw": {
+        "name": "NIT Warangal, Kazipet, Telangana, India",
+        "lat": 17.9836,
+        "lon": 79.5308,
+        "tz": "Asia/Kolkata"
+    },
+    "nit calicut": {
+        "name": "NIT Calicut, Chathamangalam, Kerala, India",
+        "lat": 11.3216,
+        "lon": 75.9336,
+        "tz": "Asia/Kolkata"
+    },
+    "nitc": {
+        "name": "NIT Calicut, Chathamangalam, Kerala, India",
+        "lat": 11.3216,
+        "lon": 75.9336,
+        "tz": "Asia/Kolkata"
+    },
+    "nit rourkela": {
+        "name": "NIT Rourkela, Odisha, India",
+        "lat": 22.2531,
+        "lon": 84.901,
+        "tz": "Asia/Kolkata"
+    },
+    "nitr": {
+        "name": "NIT Rourkela, Odisha, India",
+        "lat": 22.2531,
+        "lon": 84.901,
+        "tz": "Asia/Kolkata"
+    },
+    "vnit nagpur": {
+        "name": "VNIT Nagpur, Maharashtra, India",
+        "lat": 21.1255,
+        "lon": 79.0522,
+        "tz": "Asia/Kolkata"
+    },
+    "svnit surat": {
+        "name": "SVNIT Surat, Gujarat, India",
+        "lat": 21.1634,
+        "lon": 72.7844,
+        "tz": "Asia/Kolkata"
+    },
+    "mnit jaipur": {
+        "name": "MNIT Jaipur, Rajasthan, India",
+        "lat": 26.864,
+        "lon": 75.8108,
+        "tz": "Asia/Kolkata"
+    },
+    "bits pilani": {
+        "name": "BITS Pilani, Vidya Vihar, Pilani, Rajasthan, India",
+        "lat": 28.3639,
+        "lon": 75.5873,
+        "tz": "Asia/Kolkata"
+    },
+    "bits goa": {
+        "name": "BITS Pilani K.K. Birla Goa Campus, Zuarinagar, Goa, India",
+        "lat": 15.3911,
+        "lon": 73.8782,
+        "tz": "Asia/Kolkata"
+    },
+    "bits hyderabad": {
+        "name": "BITS Pilani Hyderabad Campus, Jawahar Nagar, Telangana, India",
+        "lat": 17.5449,
+        "lon": 78.5718,
+        "tz": "Asia/Kolkata"
+    },
+    "iiit hyderabad": {
+        "name": "IIIT Hyderabad, Gachibowli, Hyderabad, Telangana, India",
+        "lat": 17.4455,
+        "lon": 78.3489,
+        "tz": "Asia/Kolkata"
+    },
+    "iiith": {
+        "name": "IIIT Hyderabad, Gachibowli, Hyderabad, Telangana, India",
+        "lat": 17.4455,
+        "lon": 78.3489,
+        "tz": "Asia/Kolkata"
+    },
+    "hyderabad": {
+        "name": "Hyderabad, Telangana, India",
+        "lat": 17.385,
+        "lon": 78.4867,
+        "tz": "Asia/Kolkata"
+    },
+    "vit vellore": {
+        "name": "Vellore Institute of Technology (VIT), Vellore, Tamil Nadu, India",
+        "lat": 12.9692,
+        "lon": 79.1559,
+        "tz": "Asia/Kolkata"
+    },
+    "vit": {
+        "name": "Vellore Institute of Technology (VIT), Vellore, Tamil Nadu, India",
+        "lat": 12.9692,
+        "lon": 79.1559,
+        "tz": "Asia/Kolkata"
+    },
+    "coep": {
+        "name": "COEP Technological University, Pune, Maharashtra, India",
+        "lat": 18.5293,
+        "lon": 73.8565,
+        "tz": "Asia/Kolkata"
+    },
+    "pune": {
+        "name": "Pune, Maharashtra, India",
+        "lat": 18.5204,
+        "lon": 73.8567,
+        "tz": "Asia/Kolkata"
+    },
+    "ceg": {
+        "name": "College of Engineering, Guindy (CEG), Anna University, Chennai, India",
+        "lat": 13.0118,
+        "lon": 80.2355,
+        "tz": "Asia/Kolkata"
+    },
+    "anna university": {
+        "name": "Anna University, Guindy, Chennai, Tamil Nadu, India",
+        "lat": 13.0118,
+        "lon": 80.2355,
+        "tz": "Asia/Kolkata"
+    },
+    "dtu": {
+        "name": "Delhi Technological University (DTU), Rohini, Delhi, India",
+        "lat": 28.7499,
+        "lon": 77.117,
+        "tz": "Asia/Kolkata"
+    },
+    "nsut": {
+        "name": "Netaji Subhas University of Technology (NSUT), Dwarka, Delhi, India",
+        "lat": 28.6094,
+        "lon": 77.0354,
+        "tz": "Asia/Kolkata"
+    },
+    "munich": {
+        "name": "Munich, Bavaria, Germany",
+        "lat": 48.1351,
+        "lon": 11.582,
+        "tz": "Europe/Berlin"
+    },
+    "berlin": {
+        "name": "Berlin, Germany",
+        "lat": 52.52,
+        "lon": 13.405,
+        "tz": "Europe/Berlin"
+    },
+    "london": {
+        "name": "London, Greater London, United Kingdom",
+        "lat": 51.5074,
+        "lon": -0.1278,
+        "tz": "Europe/London"
+    },
+    "tokyo": {
+        "name": "Tokyo, Japan",
+        "lat": 35.6762,
+        "lon": 139.6503,
+        "tz": "Asia/Tokyo"
+    },
+    "san francisco": {
+        "name": "San Francisco, California, United States",
+        "lat": 37.7749,
+        "lon": -122.4194,
+        "tz": "America/Los_Angeles"
+    },
+    "new york": {
+        "name": "New York, United States",
+        "lat": 40.7128,
+        "lon": -74.006,
+        "tz": "America/New_York"
+    },
+    "singapore": {
+        "name": "Singapore",
+        "lat": 1.3521,
+        "lon": 103.8198,
+        "tz": "Asia/Singapore"
+    },
+    "dubai": {
+        "name": "Dubai, United Arab Emirates",
+        "lat": 25.2048,
+        "lon": 55.2708,
+        "tz": "Asia/Dubai"
+    }
+};
 
     // WMO Weather Code Table & Human-Readable Icon / Description
     function getWmoWeatherDetails(code, is_day) {
@@ -1269,20 +1740,52 @@
       const query = (rawQuery || '').trim();
       if (!query) return;
 
-      if (searchStatusMsg) searchStatusMsg.innerText = `Searching for "${query}"...`;
+      if (searchStatusMsg) searchStatusMsg.innerHTML = `<span class="text-sky-500 animate-pulse">Searching for "${query}"...</span>`;
       const qLower = query.toLowerCase();
+
+      // 0. Direct Coordinate Check (e.g. "13.0108, 74.7943")
+      const coordMatch = query.match(/^(-?\d+(\.\d+)?)[,\s]+(-?\d+(\.\d+)?)$/);
+      if (coordMatch) {
+        const lat = parseFloat(coordMatch[1]);
+        const lon = parseFloat(coordMatch[3]);
+        applyResolvedLocation(`Coordinates (${lat.toFixed(4)}°N, ${lon.toFixed(4)}°E)`, lat, lon, 'auto');
+        if (searchStatusMsg) searchStatusMsg.innerHTML = `<span class="text-emerald-500 font-medium">✓ Set Coordinates: ${lat.toFixed(4)}°N, ${lon.toFixed(4)}°E</span>`;
+        await fetchRealWeather();
+        return;
+      }
 
       // 1. Instant Campus & Institution Alias Map Check (0ms, 100% reliable)
       for (const [key, val] of Object.entries(CAMPUS_ALIASES)) {
-        if (qLower === key || qLower.includes(key) || key.includes(qLower)) {
+        if (qLower === key || (qLower.length >= 3 && (qLower.includes(key) || key.includes(qLower)))) {
           applyResolvedLocation(val.name, val.lat, val.lon, val.tz || 'Asia/Kolkata');
-          if (searchStatusMsg) searchStatusMsg.innerText = `✓ Found campus: ${val.name}`;
+          if (searchStatusMsg) searchStatusMsg.innerHTML = `<span class="text-emerald-500 font-medium">✓ Found campus: ${val.name}</span>`;
           await fetchRealWeather();
           return;
         }
       }
 
-      // 2. Open-Meteo Geocoding API (Cities, Municipalities)
+      // 2. Photon Geocoding API (Universities, Campuses, Landmarks across the World)
+      try {
+        const photonUrl = `https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&limit=5`;
+        const pResp = await fetch(photonUrl);
+        if (pResp.ok) {
+          const pData = await pResp.json();
+          if (pData && pData.features && pData.features.length > 0) {
+            const top = pData.features[0];
+            const coords = top.geometry.coordinates; // [lon, lat]
+            const props = top.properties;
+            const nameParts = [props.name, props.city || props.county, props.state, props.country].filter(Boolean).join(', ');
+            applyResolvedLocation(nameParts, coords[1], coords[0], 'auto');
+            if (searchStatusMsg) searchStatusMsg.innerHTML = `<span class="text-emerald-500 font-medium">✓ Resolved: ${nameParts}</span>`;
+            await fetchRealWeather();
+            return;
+          }
+        }
+      } catch (e) {
+        console.warn("Photon geocoding error:", e);
+      }
+
+      // 3. Open-Meteo Geocoding API (Cities, Municipalities)
       try {
         const omUrl = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(query)}&count=5&language=en&format=json`;
         const omResp = await fetch(omUrl);
@@ -1292,7 +1795,7 @@
             const top = omData.results[0];
             const nameParts = [top.name, top.admin1, top.country].filter(Boolean).join(', ');
             applyResolvedLocation(nameParts, top.latitude, top.longitude, top.timezone || 'UTC');
-            if (searchStatusMsg) searchStatusMsg.innerText = `✓ Found: ${nameParts}`;
+            if (searchStatusMsg) searchStatusMsg.innerHTML = `<span class="text-emerald-500 font-medium">✓ Found: ${nameParts}</span>`;
             await fetchRealWeather();
             return;
           }
@@ -1301,9 +1804,8 @@
         console.warn("Open-Meteo geocoding network error:", e);
       }
 
-      // 3. Fallback to OpenStreetMap Nominatim (Universities, Campuses, Landmarks, POIs)
+      // 4. OpenStreetMap Nominatim Fallback
       try {
-        if (searchStatusMsg) searchStatusMsg.innerText = `Querying OpenStreetMap POI for "${query}"...`;
         const osmUrl = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=json&limit=5`;
         const osmResp = await fetch(osmUrl, { headers: { 'Accept-Language': 'en' } });
         if (osmResp.ok) {
@@ -1314,7 +1816,7 @@
             const lon = parseFloat(top.lon);
             const name = top.display_name.split(',').slice(0, 3).join(', ');
             applyResolvedLocation(name, lat, lon, 'auto');
-            if (searchStatusMsg) searchStatusMsg.innerText = `✓ Resolved: ${name}`;
+            if (searchStatusMsg) searchStatusMsg.innerHTML = `<span class="text-emerald-500 font-medium">✓ Resolved: ${name}</span>`;
             await fetchRealWeather();
             return;
           }
@@ -1323,7 +1825,7 @@
         console.warn("Nominatim geocoding network error:", e);
       }
 
-      if (searchStatusMsg) searchStatusMsg.innerText = `❌ No match for "${query}". Check spelling or paste coordinates below.`;
+      if (searchStatusMsg) searchStatusMsg.innerHTML = `<span class="text-amber-500">⚠️ No match for "${query}". You can enter coordinates below directly.</span>`;
     }
 
     // Place Search Event Listeners
@@ -1350,14 +1852,16 @@
       searchAndFetchLocation(inputPlaceSearch.value);
     });
 
-    // Dropdown suggestions populator
+    // Dropdown suggestions populator with deduplication & Photon POI coverage
     async function showGeocodingSuggestions(query) {
       const qLower = query.toLowerCase();
       let suggestions = [];
+      const seenNames = new Set();
 
-      // Check campus aliases
+      // 1. Check campus aliases (Instant 0ms lookup)
       for (const [key, val] of Object.entries(CAMPUS_ALIASES)) {
-        if (key.includes(qLower) || qLower.includes(key)) {
+        if ((key.includes(qLower) || (qLower.length >= 3 && qLower.includes(key))) && !seenNames.has(val.name)) {
+          seenNames.add(val.name);
           suggestions.push({
             name: val.name,
             lat: val.lat,
@@ -1368,22 +1872,50 @@
         }
       }
 
-      // Query Open-Meteo
+      // 2. Query Photon Geocoder (Fast OpenStreetMap POIs & Universities)
       try {
-        const url = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(query)}&count=5&language=en&format=json`;
+        const pUrl = `https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&limit=4`;
+        const pResp = await fetch(pUrl);
+        if (pResp.ok) {
+          const pData = await pResp.json();
+          if (pData && pData.features) {
+            pData.features.forEach(f => {
+              const p = f.properties;
+              const nameParts = [p.name, p.city || p.county, p.country].filter(Boolean).join(', ');
+              if (!seenNames.has(nameParts)) {
+                seenNames.add(nameParts);
+                suggestions.push({
+                  name: nameParts,
+                  lat: f.geometry.coordinates[1],
+                  lon: f.geometry.coordinates[0],
+                  desc: `${f.geometry.coordinates[1].toFixed(3)}°N, ${f.geometry.coordinates[0].toFixed(3)}°E • ${p.osm_value || 'Location'}`,
+                  tz: 'auto'
+                });
+              }
+            });
+          }
+        }
+      } catch (err) {}
+
+      // 3. Query Open-Meteo (Cities & Municipalities)
+      try {
+        const url = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(query)}&count=4&language=en&format=json`;
         const resp = await fetch(url);
         if (resp.ok) {
           const data = await resp.json();
           if (data && data.results) {
             data.results.forEach(res => {
               const nameParts = [res.name, res.admin1, res.country].filter(Boolean).join(', ');
-              suggestions.push({
-                name: nameParts,
-                lat: res.latitude,
-                lon: res.longitude,
-                desc: `${res.latitude.toFixed(3)}°N, ${res.longitude.toFixed(3)}°E • City`,
-                tz: res.timezone
-              });
+              if (!seenNames.has(nameParts)) {
+                seenNames.add(nameParts);
+                suggestions.push({
+                  name: nameParts,
+                  lat: res.latitude,
+                  lon: res.longitude,
+                  desc: `${res.latitude.toFixed(3)}°N, ${res.longitude.toFixed(3)}°E • City`,
+                  tz: res.timezone
+                });
+              }
             });
           }
         }
@@ -1397,7 +1929,7 @@
           item.innerHTML = `<p class="font-medium text-slate-800 dark:text-slate-100">${s.name}</p><p class="text-[10px] text-slate-400 font-mono">${s.desc}</p>`;
           item.addEventListener('click', () => {
             applyResolvedLocation(s.name, s.lat, s.lon, s.tz);
-            if (searchStatusMsg) searchStatusMsg.innerText = `✓ Selected: ${s.name}`;
+            if (searchStatusMsg) searchStatusMsg.innerHTML = `<span class="text-emerald-500 font-medium">✓ Selected: ${s.name}</span>`;
             fetchRealWeather();
           });
           geoSuggestions.appendChild(item);
@@ -1453,7 +1985,15 @@
     inputEnvDateTime.value = new Date(initialNow.getTime() - (initialNow.getTimezoneOffset() * 60000)).toISOString().slice(0, 16);
 
     // Fetch Weather Data (Live or Time-travel)
-    btnFetchWeather.addEventListener('click', fetchRealWeather);
+    btnFetchWeather.addEventListener('click', async () => {
+      const typed = (inputPlaceSearch.value || '').trim();
+      // If user typed a search query that hasn't been fetched yet, resolve it first!
+      if (typed && (!state.envData.placeName || !state.envData.placeName.toLowerCase().includes(typed.toLowerCase()))) {
+        await searchAndFetchLocation(typed);
+      } else {
+        await fetchRealWeather();
+      }
+    });
 
     async function fetchRealWeather() {
       fetchSpinner.classList.remove('hidden');
@@ -2003,7 +2543,16 @@
       }
 
       const dynBox = document.getElementById('dynamicConclusionBox');
-      if (dynBox) dynBox.innerHTML = conclusion;
+      if (dynBox) {
+        const defaultIcon = state.speed_kmh <= 30 ? '🚗' : (state.speed_kmh <= 80 ? '⚡' : '🚀');
+        dynBox.innerHTML = `
+          <div class="flex items-start gap-2.5">
+            <span class="text-base shrink-0 select-none">${defaultIcon}</span>
+            <div id="dynamicConclusionContent">${conclusion || 'Simulating OTFS-VLC Doppler and atmospheric response...'}</div>
+          </div>
+        `;
+        dynBox.style.display = 'block';
+      }
 
       renderPlots();
     }
@@ -2296,6 +2845,13 @@
       }
 
       updateAll();
+
+      // Automatically fetch live real-world weather on initial launch
+      if (state.envMode === 'auto') {
+        setTimeout(() => {
+          fetchRealWeather();
+        }, 200);
+      }
     });
   </script>
 </body>
