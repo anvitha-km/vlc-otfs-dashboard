@@ -289,11 +289,11 @@
             </div>
             <div>
               <span class="text-[10px] text-slate-500 dark:text-slate-400 block mb-1">Metasurface Architecture (RIS)</span>
-              <select id="selRis" class="w-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg px-2.5 py-1.5 text-slate-800 dark:text-slate-200 text-xs focus:ring-1 focus:ring-cyan-500">
-                <option value="hris" selected>Hybrid RIS (64 el, 8 RF chains)</option>
+              <select id="selRis" class="w-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg px-2 py-1.5 text-slate-800 dark:text-slate-200 text-[11px] focus:ring-1 focus:ring-cyan-500 truncate" title="Metasurface Architecture">
+                <option value="hris" selected>Hybrid RIS (64 el, 8 RF)</option>
                 <option value="ris64">Passive RIS (64 elements)</option>
                 <option value="ris32">Passive RIS (32 elements)</option>
-                <option value="none">None (Direct Propagation Link)</option>
+                <option value="none">None (Direct LoS / NLoS)</option>
               </select>
             </div>
           </div>
@@ -353,10 +353,10 @@
             <button class="mod-btn px-2 py-1 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-medium text-center hover:bg-slate-200 dark:hover:bg-slate-700" data-mod="64qam">64-QAM</button>
           </div>
           <div class="pt-1">
-            <select id="selPilot" class="w-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg px-2 py-1.5 text-slate-800 dark:text-slate-200 text-xs">
-              <option value="cs50" selected>DBGP-CS (50% Pilot Overhead Reduction [verify])</option>
-              <option value="ddrnet">DDRNet Noncoherent: 12.1% (16x16) / 6.2% (32x32)</option>
-              <option value="standard">Embedded pilot: 38-81% (grid dependent). OMP: 25-50%</option>
+            <select id="selPilot" class="w-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg px-2 py-1.5 text-slate-800 dark:text-slate-200 text-[11px] truncate" title="Modulation & Pilot Format">
+              <option value="cs50" selected>DBGP-CS (50% Overhead Reduction)</option>
+              <option value="ddrnet">DDRNet Noncoherent (6.2% - 12.1%)</option>
+              <option value="standard">Embedded Pilot (OMP / Standard)</option>
             </select>
           </div>
         </div>
@@ -802,7 +802,7 @@
             </div>
 
             <p class="text-[10.5px] text-slate-500 dark:text-slate-400 leading-normal pt-1">
-              <em>Note:</em> When testing in an automobile or train, activating GPS pipes your actual physical velocity into the Doppler formula ($f_d = rac{v}{c} f_c$), proving live on your screen that 5G OFDM suffers severe Doppler degradation while AI-OTFS maintains communication continuity.
+              <em>Note:</em> When testing in an automobile or train, activating GPS pipes your actual physical velocity into the Doppler formula (<i>f</i><sub>d</sub> = <i>v</i> &times; <i>f</i><sub>c</sub> / <i>c</i>), proving live on your screen that 5G OFDM suffers severe Doppler degradation while AI-OTFS maintains communication continuity.
             </p>
           </div>
         </div>
@@ -1913,8 +1913,12 @@
 
       // Start 60 FPS animation loop
       function renderLoop() {
-        drawSpatialMap(ctx, canvas);
-        state.pulse_phase = (state.pulse_phase + 0.05) % (Math.PI * 2);
+        try {
+          drawSpatialMap(ctx, canvas);
+          state.pulse_phase = (state.pulse_phase + 0.05) % (Math.PI * 2);
+        } catch (err) {
+          console.error("Canvas drawSpatialMap error:", err);
+        }
         mapAnimId = requestAnimationFrame(renderLoop);
       }
       if (!mapAnimId) {
@@ -1988,9 +1992,12 @@
 
     function drawSpatialMap(ctx, canvas) {
       const rect = canvas.getBoundingClientRect();
-      const w = rect.width;
-      const h = rect.height;
-      if (!w || !h || w <= 0 || h <= 0) return;
+      let w = rect.width;
+      let h = rect.height;
+      if (!w || !h || w <= 0 || h <= 0) {
+        w = canvas.parentElement ? (canvas.parentElement.clientWidth || 800) : 800;
+        h = canvas.parentElement ? (canvas.parentElement.clientHeight || 440) : 440;
+      }
 
       const dpr = window.devicePixelRatio || 1;
       const targetW = Math.round(w * dpr);
