@@ -1852,34 +1852,22 @@
       if (!canvas) return;
       const ctx = canvas.getContext('2d');
 
-      // Adjust canvas resolution for retina displays
-      function resizeCanvas() {
-        const rect = canvas.getBoundingClientRect();
-        canvas.width = rect.width * window.devicePixelRatio;
-        canvas.height = rect.height * window.devicePixelRatio;
-        ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
-      }
-      resizeCanvas();
-      window.addEventListener('resize', resizeCanvas);
-
       // Node interaction handlers (Touch & Mouse)
       function getCanvasPos(e) {
         const rect = canvas.getBoundingClientRect();
         const clientX = e.touches ? e.touches[0].clientX : e.clientX;
         const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-        const scaleX = rect.width / (canvas.width / window.devicePixelRatio);
-        const scaleY = rect.height / (canvas.height / window.devicePixelRatio);
         return {
-          x: (clientX - rect.left) / scaleX,
-          y: (clientY - rect.top) / scaleY
+          x: clientX - rect.left,
+          y: clientY - rect.top
         };
       }
 
       function getHitNode(pos) {
         const distUe = Math.hypot(pos.x - state.ue_x, pos.y - state.ue_y);
-        if (distUe < 28) return 'ue';
+        if (distUe < 32) return 'ue';
         const distRis = Math.hypot(pos.x - state.ris_x, pos.y - state.ris_y);
-        if (distRis < 28) return 'ris';
+        if (distRis < 32) return 'ris';
         return null;
       }
 
@@ -1894,11 +1882,11 @@
         if (e.cancelable) e.preventDefault();
         const pos = getCanvasPos(e);
         const rect = canvas.getBoundingClientRect();
-        const w = rect.width;
-        const h = rect.height;
+        const w = rect.width || 800;
+        const h = rect.height || 400;
 
-        const clampedX = Math.max(30, Math.min(w - 30, pos.x));
-        const clampedY = Math.max(30, Math.min(h - 30, pos.y));
+        const clampedX = Math.max(35, Math.min(w - 35, pos.x));
+        const clampedY = Math.max(35, Math.min(h - 35, pos.y));
 
         if (draggedNode === 'ue') {
           state.ue_x = clampedX;
@@ -1923,7 +1911,7 @@
       canvas.addEventListener('touchmove', onPointerMove, { passive: false });
       window.addEventListener('touchend', onPointerUp);
 
-      // Start render loop
+      // Start 60 FPS animation loop
       function renderLoop() {
         drawSpatialMap(ctx, canvas);
         state.pulse_phase = (state.pulse_phase + 0.05) % (Math.PI * 2);
@@ -1964,16 +1952,16 @@
       if (hudUe) hudUe.innerText = `(${dx_m.toFixed(0)}m, ${dy_m.toFixed(0)}m)`;
 
       const sideCoords = document.getElementById('sideValCoords');
-      if (sideCoords) sideCoords.innerText = `${dist_los}m, ${azimuth_deg}°`;
+      if (sideCoords) sideCoords.innerText = `${dist_los}m, ${azimuth_deg}\u00B0`;
       const sideAngle = document.getElementById('sideValAngle');
-      if (sideAngle) sideAngle.innerText = `${azimuth_deg}°`;
+      if (sideAngle) sideAngle.innerText = `${azimuth_deg}\u00B0`;
 
       const geoDirect = document.getElementById('geoDirectDist');
       if (geoDirect) geoDirect.innerText = `${dist_los.toFixed(1)} m`;
       const geoRis = document.getElementById('geoRisDist');
       if (geoRis) geoRis.innerText = `${dist_ris} m`;
       const geoAz = document.getElementById('geoAzimuth');
-      if (geoAz) geoAz.innerText = `${azimuth_deg}°`;
+      if (geoAz) geoAz.innerText = `${azimuth_deg}\u00B0`;
 
       const geoLos = document.getElementById('geoLosStatus');
       const geoLossSum = document.getElementById('geoPathLossSum');
@@ -2002,14 +1990,32 @@
       const rect = canvas.getBoundingClientRect();
       const w = rect.width;
       const h = rect.height;
+      if (!w || !h || w <= 0 || h <= 0) return;
+
+      const dpr = window.devicePixelRatio || 1;
+      const targetW = Math.round(w * dpr);
+      const targetH = Math.round(h * dpr);
+
+      // Auto-adapt canvas internal resolution
+      if (canvas.width !== targetW || canvas.height !== targetH) {
+        canvas.width = targetW;
+        canvas.height = targetH;
+      }
+
+      // Reset transform and scale by DPR on every frame (avoids compounding scale bugs)
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
       const isDark = state.isDark;
+      const roadY = Math.round(h * 0.55);
 
-      ctx.clearRect(0, 0, w, h);
+      // 1. Clear background
+      ctx.fillStyle = isDark ? '#070d18' : '#f8fafc';
+      ctx.fillRect(0, 0, w, h);
 
-      // Background grid lines
-      ctx.strokeStyle = isDark ? '#1e293b' : '#e2e8f0';
+      // 2. Background Grid Lines
+      ctx.strokeStyle = isDark ? '#172235' : '#e2e8f0';
       ctx.lineWidth = 1;
-      const gridSize = 40;
+      const gridSize = 35;
       for (let x = 0; x < w; x += gridSize) {
         ctx.beginPath();
         ctx.moveTo(x, 0);
@@ -2023,21 +2029,34 @@
         ctx.stroke();
       }
 
-      // Road lane layout
-      ctx.fillStyle = isDark ? '#0f172a' : '#f1f5f9';
-      ctx.fillRect(0, 160, w, 80);
+      // 3. Road Lane Layout
+      ctx.fillStyle = isDark ? '#0f172a' : '#edf2f7';
+      ctx.fillRect(0, roadY - 45, w, 90);
+
+      // Road shoulder borders
       ctx.strokeStyle = isDark ? '#334155' : '#cbd5e1';
-      ctx.setLineDash([12, 10]);
+      ctx.lineWidth = 1.5;
       ctx.beginPath();
-      ctx.moveTo(0, 200);
-      ctx.lineTo(w, 200);
+      ctx.moveTo(0, roadY - 45);
+      ctx.lineTo(w, roadY - 45);
+      ctx.moveTo(0, roadY + 45);
+      ctx.lineTo(w, roadY + 45);
+      ctx.stroke();
+
+      // Road center dashed line
+      ctx.strokeStyle = isDark ? '#475569' : '#94a3b8';
+      ctx.lineWidth = 2;
+      ctx.setLineDash([14, 12]);
+      ctx.beginPath();
+      ctx.moveTo(0, roadY);
+      ctx.lineTo(w, roadY);
       ctx.stroke();
       ctx.setLineDash([]);
 
-      // Draw Trajectory Trail
+      // 4. Trajectory Trail
       if (vehicleTrail.length > 1) {
-        ctx.strokeStyle = 'rgba(16, 185, 129, 0.35)';
-        ctx.lineWidth = 3;
+        ctx.strokeStyle = 'rgba(16, 185, 129, 0.4)';
+        ctx.lineWidth = 3.5;
         ctx.beginPath();
         ctx.moveTo(vehicleTrail[0].x, vehicleTrail[0].y);
         for (let i = 1; i < vehicleTrail.length; i++) {
@@ -2046,23 +2065,23 @@
         ctx.stroke();
       }
 
-      // Building Obstacle (if toggled)
+      // 5. Building Blockage (if toggled)
       if (state.is_blocked) {
-        const obsX = (state.rsu_x + state.ue_x) / 2 - 20;
-        const obsY = (state.rsu_y + state.ue_y) / 2 - 35;
+        const obsX = (state.rsu_x + state.ue_x) / 2 - 25;
+        const obsY = (state.rsu_y + state.ue_y) / 2 - 40;
         ctx.fillStyle = isDark ? '#be123c' : '#f43f5e';
-        ctx.fillRect(obsX, obsY, 40, 70);
+        ctx.fillRect(obsX, obsY, 50, 80);
         ctx.strokeStyle = '#ffe4e6';
-        ctx.lineWidth = 1.5;
-        ctx.strokeRect(obsX, obsY, 40, 70);
+        ctx.lineWidth = 2;
+        ctx.strokeRect(obsX, obsY, 50, 80);
 
         ctx.fillStyle = '#ffffff';
-        ctx.font = '10px monospace';
+        ctx.font = 'bold 9.5px monospace';
         ctx.textAlign = 'center';
-        ctx.fillText('BLOCKAGE', obsX + 20, obsY + 40);
+        ctx.fillText('BLOCKAGE', obsX + 25, obsY + 45);
       }
 
-      // 1. BEAM RAYS: Direct LoS Ray
+      // 6. BEAM RAYS: Direct LoS Ray
       ctx.lineWidth = state.is_blocked ? 1.5 : 2.5;
       if (state.is_blocked) {
         ctx.strokeStyle = '#f43f5e';
@@ -2077,18 +2096,18 @@
       ctx.stroke();
       ctx.setLineDash([]);
 
-      // Direct Beam Pulse Animation (if not blocked)
+      // Direct Pulse Animation
       if (!state.is_blocked) {
         const pulseRatio = (Math.sin(state.pulse_phase) + 1) / 2;
         const pulseX = state.rsu_x + (state.ue_x - state.rsu_x) * pulseRatio;
         const pulseY = state.rsu_y + (state.ue_y - state.rsu_y) * pulseRatio;
         ctx.fillStyle = '#22d3ee';
         ctx.beginPath();
-        ctx.arc(pulseX, pulseY, 5, 0, Math.PI * 2);
+        ctx.arc(pulseX, pulseY, 5.5, 0, Math.PI * 2);
         ctx.fill();
       }
 
-      // 2. BEAM RAYS: RIS Reflected Path (RSU -> RIS -> UE)
+      // 7. BEAM RAYS: RIS Reflected Path
       if (state.ris !== 'none') {
         ctx.strokeStyle = '#f59e0b';
         ctx.lineWidth = 2.2;
@@ -2112,46 +2131,46 @@
         }
         ctx.fillStyle = '#fbbf24';
         ctx.beginPath();
-        ctx.arc(px, py, 4.5, 0, Math.PI * 2);
+        ctx.arc(px, py, 5, 0, Math.PI * 2);
         ctx.fill();
       }
 
-      // 3. DRAW RSU BASE STATION (Cyan)
+      // 8. DRAW RSU BASE STATION (Cyan)
       ctx.fillStyle = '#06b6d4';
       ctx.beginPath();
-      ctx.arc(state.rsu_x, state.rsu_y, 14, 0, Math.PI * 2);
+      ctx.arc(state.rsu_x, state.rsu_y, 16, 0, Math.PI * 2);
       ctx.fill();
       ctx.strokeStyle = '#ffffff';
-      ctx.lineWidth = 2;
+      ctx.lineWidth = 2.5;
       ctx.stroke();
 
       ctx.fillStyle = '#ffffff';
       ctx.font = 'bold 9px sans-serif';
       ctx.textAlign = 'center';
-      ctx.fillText('RSU', state.rsu_x, state.rsu_y + 3);
+      ctx.fillText('RSU', state.rsu_x, state.rsu_y + 3.5);
 
-      // 4. DRAW RIS PANEL (Amber)
+      // 9. DRAW RIS PANEL (Amber)
       if (state.ris !== 'none') {
         ctx.save();
         ctx.translate(state.ris_x, state.ris_y);
         ctx.fillStyle = '#f59e0b';
-        ctx.fillRect(-18, -8, 36, 16);
+        ctx.fillRect(-22, -10, 44, 20);
         ctx.strokeStyle = '#ffffff';
-        ctx.lineWidth = 2;
-        ctx.strokeRect(-18, -8, 36, 16);
+        ctx.lineWidth = 2.5;
+        ctx.strokeRect(-22, -10, 44, 20);
         ctx.fillStyle = '#ffffff';
-        ctx.font = 'bold 8.5px sans-serif';
+        ctx.font = 'bold 9px sans-serif';
         ctx.textAlign = 'center';
-        ctx.fillText('RIS 64', 0, 3);
+        ctx.fillText('RIS 64', 0, 3.5);
         ctx.restore();
       }
 
-      // 5. DRAW VEHICLE / UE (Emerald)
+      // 10. DRAW VEHICLE / UE (Emerald)
       ctx.save();
       ctx.translate(state.ue_x, state.ue_y);
       ctx.fillStyle = '#10b981';
       ctx.beginPath();
-      ctx.arc(0, 0, 14, 0, Math.PI * 2);
+      ctx.arc(0, 0, 16, 0, Math.PI * 2);
       ctx.fill();
       ctx.strokeStyle = '#ffffff';
       ctx.lineWidth = 2.5;
@@ -2161,22 +2180,19 @@
       ctx.strokeStyle = '#ffffff';
       ctx.fillStyle = '#ffffff';
       ctx.beginPath();
-      ctx.moveTo(10, 0);
+      ctx.moveTo(11, 0);
       ctx.lineTo(-4, -6);
       ctx.lineTo(-4, 6);
       ctx.closePath();
       ctx.fill();
 
-      ctx.font = 'bold 9px sans-serif';
+      ctx.font = 'bold 10px sans-serif';
       ctx.textAlign = 'center';
       ctx.fillStyle = isDark ? '#34d399' : '#065f46';
-      ctx.fillText('UE', 0, 24);
+      ctx.fillText('VEHICLE (UE)', 0, 28);
       ctx.restore();
     }
 
-    // ===============================================================
-    // REAL MOBILE DEVICE GPS TELEMETRY ENGINE
-    // ===============================================================
     function toggleDeviceGps() {
       if (state.gps_active) {
         stopDeviceGps();
@@ -2542,6 +2558,18 @@
         } else if (tab === 'location') {
           if (tabBtnLocation) tabBtnLocation.className = 'px-3 sm:px-4 py-1.5 rounded-lg bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-500/40 text-xs font-medium transition flex items-center gap-1.5';
           if (viewLocation) viewLocation.classList.remove('hidden');
+          requestAnimationFrame(() => {
+            const canvas = document.getElementById('spatialMapCanvas');
+            if (canvas) {
+              const rect = canvas.getBoundingClientRect();
+              const dpr = window.devicePixelRatio || 1;
+              if (rect.width > 0 && rect.height > 0) {
+                canvas.width = Math.round(rect.width * dpr);
+                canvas.height = Math.round(rect.height * dpr);
+              }
+            }
+            updateSpatialMetricsFromNodes();
+          });
         }
         renderAll();
         setTimeout(() => triggerPlotResize(), 50);
