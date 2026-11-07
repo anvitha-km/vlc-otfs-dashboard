@@ -276,7 +276,7 @@
             </tr>
             <tr class="hover:bg-slate-900/50">
               <td class="p-3 font-semibold text-white">Graph 2: BER vs. Vehicle Velocity</td>
-              <td class="p-3 text-indigo-300">High-Mobility Invariance across 0-500 km/h</td>
+              <td class="p-3 text-indigo-300">Maintains Performance under Evaluated High-Mobility Conditions (up to 500 km/h)</td>
               <td class="p-3 text-slate-300 leading-relaxed">Proves Doppler resilience: 5G OFDM error rate degrades drastically above \(50\text{ km/h}\) (\(\text{BER} > 10^{-2}\)), whereas AI-OTFS maintains flat, sub-\(10^{-4}\) BER even at \(500\text{ km/h}\).</td>
               <td class="p-3 font-mono text-[11px] text-slate-400">Yuan et al. (2021), <em>IEEE TCOM</em>; Li et al. (2022), <em>IEEE TVT</em></td>
             </tr>
@@ -378,7 +378,7 @@
           $$\text{BER}_{\text{OFDM}}(\gamma) \approx Q\left( \sqrt{\frac{2\gamma}{1 + \gamma \sigma_{\text{ICI}}^2}} \right) \xrightarrow{\gamma \to \infty} Q\left( \sqrt{\frac{2}{\sigma_{\text{ICI}}^2}} \right) = \text{Constant Error Floor}$$
         </div>
         <p class="text-xs text-slate-300 leading-relaxed">
-          In contrast, OTFS transforms the rapid channel time-variance into a 2D quasi-static circular convolution. The proposed 2D-CNN equalizer learns the residual cross-bin interference kernel \(\mathcal{K}_{\Theta}\), completely eliminating the ICI floor:
+          In contrast, OTFS transforms the rapid channel time-variance into a 2D quasi-static circular convolution. The proposed 2D-CNN equalizer learns the residual cross-bin interference kernel \(\mathcal{K}_{\Theta}\), completely mitigating the Doppler-induced ICI floor:
         </p>
         <div class="p-3 rounded-lg bg-slate-950 border border-slate-800 text-xs font-mono text-slate-200 overflow-x-auto text-center">
           $$\hat{X}[k, l] = \mathcal{F}_{\Theta}\left( Y_{\text{DD}}[k, l], \hat{H}_{\text{DD}}[k, l] \right) \implies \text{BER}_{\text{AI-OTFS}} \le \alpha \exp\left( -\beta \cdot \text{SNR} \cdot G_{\text{MIMO}} G_{\text{RIS}} \right)$$
@@ -541,7 +541,7 @@
         </h3>
         <ul class="text-xs text-slate-300 space-y-2 list-disc list-inside leading-relaxed">
           <li><strong>Catastrophic OFDM Degradation:</strong> 5G NR OFDM works adequately at pedestrian speeds (\(< 30\text{ km/h}\)), but as velocity increases to highway limits (\(120\text{ km/h}\)) and bullet trains (\(360\text{ km/h}\)), its BER degrades exponentially from \(10^{-4}\) to \(10^{-1}\), completely dropping packets and triggering link failure.</li>
-          <li><strong>OTFS Velocity Invariance:</strong> The OTFS BER curve remains virtually horizontal across the entire \(0\text{ to }500\text{ km/h}\) regime. Because OTFS modulates information onto the delay-Doppler plane, a Doppler frequency shift simply acts as a 2D cyclical phase shift across grid bins rather than destroying carrier orthogonality.</li>
+          <li><strong>OTFS High-Mobility Doppler Robustness:</strong> The OTFS BER curve remains virtually horizontal across the entire \(0\text{ to }500\text{ km/h}\) regime. Because OTFS modulates information onto the delay-Doppler plane, a Doppler frequency shift simply acts as a 2D cyclical phase shift across grid bins rather than destroying carrier orthogonality.</li>
           <li><strong>Autonomous 6G Vehicles &amp; Drones:</strong> For connected autonomous vehicles navigating at high speeds and low-altitude urban air mobility (UAM/UAVs operating at \(300-500\text{ km/h}\)), OTFS is the only modulation candidate capable of delivering ultra-reliable low-latency communication (URLLC).</li>
         </ul>
       </div>
@@ -854,7 +854,7 @@
               $$\hat{\mathbf{x}}_{t|t} = \hat{\mathbf{x}}_{t|t-1} + \mathbf{K}_t \left( \mathbf{z}_t - \mathbf{h}(\hat{\mathbf{x}}_{t|t-1}) \right)$$
             </div>
             <p class="text-slate-400 text-[11px] leading-relaxed">
-              This completely eliminates beam-sweeping pilot overhead, maintaining a beam alignment efficiency of \(98.8\%\) even as vehicles negotiate highway curves.
+              This substantially reduces beam-sweeping tracking latency and overhead, maintaining a beam alignment efficiency of \(98.8\%\) even as vehicles negotiate highway curves.
             </p>
           </div>
         </div>
